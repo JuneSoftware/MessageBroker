@@ -40,6 +40,10 @@ public class Demo : MonoBehaviour {
 		June.MessageBroker.Subscribe(Messages.STORE, GenerateCallbackHandler("Store"));
 		June.MessageBroker.Subscribe(Messages.STORE_BUTTON, GenerateCallbackHandler("StoreButton"));
 		June.MessageBroker.Subscribe(Messages.STORE_PURCHASE_SUCCESS, HandlePurchaseSuccess);
+
+		June.MessageBroker.Subscribe(
+			string.Format("{0}?{1}={2}", Messages.STORE_PURCHASE_SUCCESS, Messages.Parameters.Store.Purchase.ITEM, "Special"),
+			HandlePurchaseSpecial);
 	}
 
 	Action<string, IDictionary<string, object>> GenerateCallbackHandler(string subscriberName) {
@@ -50,6 +54,12 @@ public class Demo : MonoBehaviour {
 
 	public void HandlePurchaseSuccess(string message, IDictionary<string, object> parameters) {
 		Log(string.Format("YAY ! Successfully purchased {0}, for ${1}"
+			,parameters[Messages.Parameters.Store.Purchase.ITEM] 
+			,parameters[Messages.Parameters.Store.Purchase.PRICE]));
+	}
+
+	public void HandlePurchaseSpecial(string message, IDictionary<string, object> parameters) {
+		Log(string.Format("AWESOME ! Successfully purchased {0}, for ${1}"
 			,parameters[Messages.Parameters.Store.Purchase.ITEM] 
 			,parameters[Messages.Parameters.Store.Purchase.PRICE]));
 	}
@@ -95,6 +105,15 @@ public class Demo : MonoBehaviour {
 						new Dictionary<string, object>() { 
 							{ Messages.Parameters.Store.Purchase.ITEM, "Ultimate Combo" },
 							{ Messages.Parameters.Store.Purchase.PRICE, 0.99f }
+						});
+				}
+
+				if(GUILayout.Button("Publish *" + Messages.STORE_PURCHASE_SUCCESS + "*")) {
+					June.MessageBroker.Publish(
+						Messages.STORE_PURCHASE_SUCCESS, 
+						new Dictionary<string, object>() { 
+							{ Messages.Parameters.Store.Purchase.ITEM, "Special" },
+							{ Messages.Parameters.Store.Purchase.PRICE, 9.99f }
 						});
 				}
 			}

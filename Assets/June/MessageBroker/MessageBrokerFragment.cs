@@ -72,7 +72,6 @@ namespace June {
 			string currentFragment = fragments.FirstOrDefault();
 
 			if(string.IsNullOrEmpty(currentFragment)) {
-				_CALLBACKS.Add(callback);
 
 				if(!string.IsNullOrEmpty(query)) {
 					string[] pairs = query.Split(new char[] { QUERY_APPEND }, StringSplitOptions.RemoveEmptyEntries);
@@ -87,6 +86,9 @@ namespace June {
 						new KeyValuePair<KeyValuePair<string, object>[], Action<string, IDictionary<string, object>>>(
 						keypairs.ToArray(),
 						callback));
+				}
+				else {
+					_CALLBACKS.Add(callback);
 				}
 
 				return;
