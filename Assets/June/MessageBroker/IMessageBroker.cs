@@ -119,10 +119,11 @@ namespace June {
 		/// </summary>
 		/// <returns>A <see cref="System.String"/> that represents the current <see cref="June.IMessageBroker"/>.</returns>
 		public override string ToString () {
-			return string.Format ("[IMessageBroker: UriPath={0} Callbacks:{1} Subscribers:\n\t{2}]", 
+			return string.Format ("IMessageBroker: Callbacks:{1} Subscribers:{2} UriPath={0}\n{3}", 
 			                      UriPath,
 			                      _CALLBACKS.Count,
-			                      string.Join("\n\t", _SUBSCRIBERS.Values.ToList().ConvertAll<string>(b => b.ToString()).ToArray()));
+								  _SUBSCRIBERS.Count,
+			                      string.Join("\n", _SUBSCRIBERS.Values.ToList().ConvertAll<string>(b => b.ToString()).ToArray()));
 		}
 	}
 }
